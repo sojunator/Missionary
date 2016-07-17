@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Mission submission handling</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="{{ url_for('static', filename='js/missions.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modernizr.custom.80028.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/simple.css') }}">
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div id="note">
+            
+            {% for message in messages %}
+                <span class="notification">{{ message }}</span></li>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+    <h1>Missions</h1>    
+    <nav class="navbar navbar-default">
+        <div class="container-fluid"
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        </div><!-- /.container-fluid -->
+    </nav>   
+    <span class ="value mission-status {{statuses[0].lower()}}">{{mission.name}} by {{mission.author}}</span>
+    <form action="{{url_for('missions.view_submission', id = mission.id)}}" method=POST>
+        <table class="table table-striped">
+        <tr>
+            <td>Mission type</td>
+            <td><span class="value mission-type {{mission.mission_type}}">{{ mission.mission_type.upper() }}</span></td>
+        </tr>
+        <tr>
+            <td>Playercount</td><td>{{mission.player_count}}</td>
+        </tr>
+        <tr>
+            <td>minplay</td>
+            <td>
+                <select name="min_play">
+                {% for i in range(mission.player_count, -1, -1) %}
+                    <option {% if i|string() == mission.min_play|string() %} selected="selected" {% endif %} value={{i}}>{{i}}</option>
+                {% endfor %}
+                </select>
+            </td>
+        </tr>        
+        <tr>
+            <td>Status</td>
+            <td>
+                <select name="status">
+                {% for status in statuses %}
+                    <option value={{status}}>{{status}}</option>
+                {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>World</td><td>{{mission.world}}</td>
+        </tr>     
+        </table>
+        <span>Host notes: </span>
+        <textarea rows="15" cols="130" name="host_notes">{{mission.host_notes}}</textarea>
+            
+
+    <input type="submit" value="Update">
+    </form>
+
+    </div>
+    <div class="col-md-3"></div>
+</body>
+</html>

@@ -1,0 +1,428 @@
+body {
+    font-family: Arial,sans-serif;
+    font-size: 14px;
+    color: #000;
+    margin: 0;
+}
+
+#note {
+    position: absolute;
+    z-index: 101;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #95e868;
+    text-align: center;
+    line-height: 2.5;
+    overflow: hidden; 
+    -webkit-box-shadow: 0 0 5px black;
+    -moz-box-shadow:    0 0 5px black;
+    box-shadow:         0 0 5px black;
+}
+
+@-webkit-keyframes slideDown {
+    0%, 100% { -webkit-transform: translateY(-70px); }
+    10%, 90% { -webkit-transform: translateY(0px); }
+}
+@-moz-keyframes slideDown {
+    0%, 100% { -moz-transform: translateY(-70px); }
+    10%, 90% { -moz-transform: translateY(0px); }
+}
+
+.cssanimations.csstransforms #note {
+    -webkit-transform: translateY(-70px);
+    -webkit-animation: slideDown 5.5s 1.0s 1 ease forwards;
+    -moz-transform:    translateY(-70px);
+    -moz-animation:    slideDown 5.5s 1.0s 1 ease forwards;
+}
+.notification {
+	color: #fff;
+	font-size: 26px;
+}
+
+.hidden {
+    display: none;
+}
+
+.container {
+    width: 99%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+}
+
+.header {
+    width: 100%;
+}
+
+.content {
+    width: 100%;
+}
+
+.navigation {
+    width: 100%;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    background-color: #294546;
+    margin-bottom: 20px;
+}
+
+.navigation-button {
+    line-height: 50px;
+    width: 100px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.navigation-button.profile {
+    width: 300px;
+}
+
+.navigation-button:hover {
+    background-color: #b96f29;
+}
+
+.navigation-button.active {
+    background-color: #b96f29;
+}
+
+.navigation-button > a{
+    color: #fff;
+    text-decoration: none;
+}
+
+.nav-button {
+    display: inline-block;
+}
+
+.mission-container {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.mission-header {
+    width: 100%;
+    font-size: 17px;
+    font-weight: 600;
+    text-align: center;
+    display: table;
+}
+
+.mission-header > div {
+    padding: 6px;
+    display: table-cell;
+}
+
+.mission-header > .mission-type {
+    width: 27px;
+}
+
+.mission-status {
+	color: #fff;
+	font-size: 17px;
+
+}
+
+.mission-status.evaluating {
+    background-color: #cfe168;
+}
+
+.mission-status.accepted {
+	background-color: #68e17c;
+}
+
+.mission-status.rejected {
+	background-color: #e86868;
+}
+
+textarea { resize:vertical ; }
+
+.mission-type {
+    color: #fff;
+}
+
+.mission-type.co {
+    background-color: #4a6785;
+}
+
+.mission-type.cotvt {
+    background-color: #4a6785;
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr=#4a6785, endColorstr=#d04437);
+    background-image: -moz-linear-gradient(left, #4a6785 50%, #d04437 50%);
+    background-image: -webkit-linear-gradient(left, #4a6785 50%, #d04437 50%);
+    background-image: -ms-linear-gradient(left, #4a6785 50%, #d04437 50%);
+    background-image: linear-gradient(left, #4a6785 50%, #d04437 50%);
+    background-image: -o-linear-gradient(left, #4a6785 50%, #d04437 50%);
+    background-image: -webkit-gradient(linear, left bottom, right bottom, color-stop(50%,#4a6785), color-stop(50%,#d04437));
+}
+
+.mission-type.tvt {
+    background-color: #d04437;
+}
+
+.mission-type.gtvt {
+    background-color: #14892c;
+}
+
+.mission-type.custom {
+    background-color: #815b3a;
+}
+
+.mission-player-count {
+    width: 30px;
+    color: #FFF;
+    background-color: #f29747;
+}
+
+.mission-name {
+    color: #000;
+    background-color: #99b4ba;
+}
+
+.mission-edit {
+	width: 100px;
+    color: #000;
+    background-color: #99b4ba;
+}
+
+.mission-collapse {
+    cursor: pointer;
+}
+
+.mission-world {
+    width: 190px;
+    color: #FFF;
+    background-color: #294546;
+}
+
+.mission-delete {
+    width: 90px;
+    color: #FFF;
+    background-color: #294546;
+}
+
+div.mission-delete *
+{
+	color: #ea8282;
+}
+
+.field-content {
+    width: 100%;
+    background-color: #eee;
+    display: table;
+}
+
+.field-content > div.row {
+    width: 100%;
+    display: table-row;
+}
+
+.field-content > div.row  > div.field {
+    display: table-cell;
+    padding: 7px;
+}
+
+.field > .label {
+    width: 150px;
+    color: #707070;
+    display: table-cell;
+}
+
+.field > .value {
+    display: table-cell;
+}
+
+.field > .mission-type {
+    font-weight: 600;
+    text-align: center;
+    padding: 2px;
+}
+
+div.charts {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+div.chart {
+    width: 33%;
+    display: inline-block;
+}
+
+div.chart-header {
+    background-color: #f29747;
+    padding: 5px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #FFF;
+    cursor: pointer;
+}
+
+div.chart-content {
+    padding: 5px;
+}
+
+table.players {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+table.players > thead > tr {
+    background-color: #294546;
+    color: #fff;
+}
+
+table.players > tbody > tr {
+    border-bottom: 1px solid #ccc;
+}
+
+table.players > thead > tr > th, table.players > tbody > tr > td {
+    padding: 7px 10px;
+}
+
+span.sort-icons {
+    display: inline-block;
+    padding-bottom: 2px;
+    margin-left: 3px;
+}
+
+span.sort-icons > img {
+    display: none;
+}
+
+table.players > thead > tr > th.asc > div > span.sort-icons > img.asc {
+    display: block;
+}
+
+table.players > thead > tr > th.desc > div > span.sort-icons > img.desc {
+    display: block;
+}
+
+.Staff {
+    background-color: #FFB9B9;
+}
+.Staff:hover {
+    background-color: #EFADAD;
+}
+
+.Captain {
+    background-color: #d9edf7;
+}
+.Captain:hover {
+    background-color: #c4e3f3;
+}
+
+.Veteran {
+    background-color: #dff0d8;
+}
+.Veteran:hover {
+    background-color: #d0e9c6;
+}
+
+.Regular {
+    background-color: #fcf8e3;
+}
+.Regular:hover {
+    background-color: #faf2cc;
+}
+
+.Recruit {
+    background-color: #f5f5f5;
+}
+.Recruit:hover {
+    background-color: #e8e8e8;
+}
+
+.Guest {
+    background-color: #fae5cc;
+}
+.Guest:hover {
+    background-color: #F5DCC5;
+}
+
+td.username {
+    width: 150px;
+}
+
+td.rank {
+    width: 90px;
+}
+
+td.played {
+    width: 90px;
+}
+
+td.last-played {
+    width: 130px;
+}
+
+td.operations {
+    width: 150px;
+}
+
+.note-value {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    cursor: pointer;
+    display: inline-block;
+    padding-left: 5px;
+}
+
+.note-value:hover {
+    background-color: #fffdf6;
+}
+
+.note-value:empty:hover:before {
+    font-size: 12px;
+    font-style: italic;
+    content: "Click to edit";
+}
+
+.note-value:empty:before {
+  content: "\00a0";
+}
+
+.note-edit {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    display: inline-block;
+}
+
+.note-edit > input {
+    width: 98%;
+    font-family: Arial,sans-serif;
+    font-size: 14px;
+    color: #000;
+    padding: 3px;
+}
+
+button {
+    background-color: #f29747;
+    color: #fff;
+    border: 0;
+    line-height: 24px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #b96f29;
+}
+
+.profile-stats {
+    margin-bottom: 20px;
+}
