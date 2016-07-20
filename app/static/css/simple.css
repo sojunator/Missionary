@@ -1,125 +1,210 @@
 body {
-    font-family: Arial,sans-serif;
+    font-family: Verdana,sans-serif;
     font-size: 14px;
     color: #000;
+    background-color: #dfdfdf;
     margin: 0;
 }
 
-#note {
-    position: absolute;
-    z-index: 101;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: #95e868;
+* {
+    box-sizing: border-box;
+}
+
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+[class*="col-"] {
+    float: left;
+    padding: 15px;
+    border: 0px solid red;
+}
+
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: #FFF;
     text-align: center;
-    line-height: 2.5;
-    overflow: hidden; 
-    -webkit-box-shadow: 0 0 5px black;
-    -moz-box-shadow:    0 0 5px black;
-    box-shadow:         0 0 5px black;
-}
-
-@-webkit-keyframes slideDown {
-    0%, 100% { -webkit-transform: translateY(-70px); }
-    10%, 90% { -webkit-transform: translateY(0px); }
-}
-@-moz-keyframes slideDown {
-    0%, 100% { -moz-transform: translateY(-70px); }
-    10%, 90% { -moz-transform: translateY(0px); }
-}
-
-.cssanimations.csstransforms #note {
-    -webkit-transform: translateY(-70px);
-    -webkit-animation: slideDown 5.5s 1.0s 1 ease forwards;
-    -moz-transform:    translateY(-70px);
-    -moz-animation:    slideDown 5.5s 1.0s 1 ease forwards;
-}
-.notification {
-	color: #fff;
-	font-size: 26px;
-}
-
-.hidden {
-    display: none;
-}
-
-.container {
-    width: 99%;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 10px;
-}
-
-.header {
-    width: 100%;
-}
-
-.content {
-    width: 100%;
-}
-
-.navigation {
-    width: 100%;
-    font-size: 20px;
-    font-weight: 600;
-    color: #fff;
-    background-color: #294546;
-    margin-bottom: 20px;
-}
-
-.navigation-button {
-    line-height: 50px;
-    width: 100px;
-    display: inline-block;
-    text-align: center;
-    vertical-align: middle;
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-.navigation-button.profile {
-    width: 300px;
-}
-
-.navigation-button:hover {
-    background-color: #b96f29;
-}
-
-.navigation-button.active {
-    background-color: #b96f29;
-}
-
-.navigation-button > a{
-    color: #fff;
+    padding: 14px 16px;
     text-decoration: none;
 }
 
-.nav-button {
-    display: inline-block;
+li a:hover {
+    background-color: #383838;
 }
 
-.mission-container {
+input {
     width: 100%;
-    margin-bottom: 20px;
 }
 
-.mission-header {
+input[type=text] {
     width: 100%;
-    font-size: 17px;
-    font-weight: 600;
+    padding: 5px 2px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+
+input[type=text]:focus {
+    border: 3px solid #555;
+}
+
+input[type=submit] {
+    background-color: #979797; /* Green */
+    border: none;
+    color: white;
+    padding: 11px 32px;
     text-align: center;
-    display: table;
+    text-decoration: none;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    display: inline-block;
+    font-size: 1.25rem;
+    cursor: pointer;
 }
 
-.mission-header > div {
-    padding: 6px;
-    display: table-cell;
+input[type=submit]:hover {
+    background-color: #646464;
 }
 
-.mission-header > .mission-type {
-    width: 27px;
+.navbar {
+    list-style-type:none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #616161;
+    -webkit-transition: 0.5s;
 }
+
+.flashes {
+    list-style-type:none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #b93a32;
+    -webkit-transition: 0.5s;
+}
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile + label {
+    max-width: 100%;
+    font-size: 1.25rem;
+    /* 20px */
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    padding: 11px 32px;
+    /* 10px 20px */
+}
+
+
+.inputfile:focus + label,
+.inputfile.has-focus + label {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+
+
+.inputfile + label svg {
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    fill: currentColor;
+    margin-top: -0.25em;
+    /* 4px */
+    margin-right: 0.25em;
+    /* 4px */
+}
+
+
+
+.inputfile-1 + label {
+    color: #f1e5e6;
+    background-color: #979797;
+}
+
+.inputfile-1:focus + label,
+.inputfile-1.has-focus + label,
+.inputfile-1 + label:hover {
+    background-color: #646464;
+}
+
+button.accordion {
+    background-color: #979797;
+    color: #FFF;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: center;
+    font-size: 1.25rem;
+    /* 20px */
+    font-weight: 700;
+    text-overflow: ellipsis;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+
+button.accordion.active, button.accordion:hover {
+    background-color: #646464;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+div.panel {
+    padding: 0 18px;
+    background-color: #ddd;
+    display: none;
+}
+
+/* The "show" class is added to the accordion panel when the user clicks on one of the buttons. This will show the panel content */
+div.panel.show {
+    display: block !important;
+}
+
+textarea {
+    resize:vertical ; 
+    width: 100%;    
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc; 
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+
+textarea:focus {
+    border: 3px solid #555;
+}
+
+
 
 .mission-status {
 	color: #fff;
@@ -138,8 +223,6 @@ body {
 .mission-status.rejected {
 	background-color: #e86868;
 }
-
-textarea { resize:vertical ; }
 
 .mission-type {
     color: #fff;
@@ -210,65 +293,6 @@ div.mission-delete *
 	color: #ea8282;
 }
 
-.field-content {
-    width: 100%;
-    background-color: #eee;
-    display: table;
-}
-
-.field-content > div.row {
-    width: 100%;
-    display: table-row;
-}
-
-.field-content > div.row  > div.field {
-    display: table-cell;
-    padding: 7px;
-}
-
-.field > .label {
-    width: 150px;
-    color: #707070;
-    display: table-cell;
-}
-
-.field > .value {
-    display: table-cell;
-}
-
-.field > .mission-type {
-    font-weight: 600;
-    text-align: center;
-    padding: 2px;
-}
-
-div.charts {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-div.chart {
-    width: 33%;
-    display: inline-block;
-}
-
-div.chart-header {
-    background-color: #f29747;
-    padding: 5px;
-    font-size: 17px;
-    font-weight: 600;
-    color: #FFF;
-    cursor: pointer;
-}
-
-div.chart-content {
-    padding: 5px;
-}
-
-table.players {
-    width: 100%;
-    border-collapse: collapse;
-}
 
 .text-left {
     text-align: left;
@@ -278,151 +302,38 @@ table.players {
     text-align: center;
 }
 
-table.players > thead > tr {
-    background-color: #294546;
+#note {
+    position: absolute;
+    z-index: 101;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #95e868;
+    text-align: center;
+    line-height: 2.5;
+    overflow: hidden; 
+    -webkit-box-shadow: 0 0 5px black;
+    -moz-box-shadow:    0 0 5px black;
+    box-shadow:         0 0 5px black;
+}
+
+@-webkit-keyframes slideDown {
+    0%, 100% { -webkit-transform: translateY(-70px); }
+    10%, 90% { -webkit-transform: translateY(0px); }
+}
+@-moz-keyframes slideDown {
+    0%, 100% { -moz-transform: translateY(-70px); }
+    10%, 90% { -moz-transform: translateY(0px); }
+}
+
+.cssanimations.csstransforms #note {
+    -webkit-transform: translateY(-70px);
+    -webkit-animation: slideDown 5.5s 1.0s 1 ease forwards;
+    -moz-transform:    translateY(-70px);
+    -moz-animation:    slideDown 5.5s 1.0s 1 ease forwards;
+}
+.notification {
     color: #fff;
+    font-size: 26px;
 }
 
-table.players > tbody > tr {
-    border-bottom: 1px solid #ccc;
-}
-
-table.players > thead > tr > th, table.players > tbody > tr > td {
-    padding: 7px 10px;
-}
-
-span.sort-icons {
-    display: inline-block;
-    padding-bottom: 2px;
-    margin-left: 3px;
-}
-
-span.sort-icons > img {
-    display: none;
-}
-
-table.players > thead > tr > th.asc > div > span.sort-icons > img.asc {
-    display: block;
-}
-
-table.players > thead > tr > th.desc > div > span.sort-icons > img.desc {
-    display: block;
-}
-
-.Staff {
-    background-color: #FFB9B9;
-}
-.Staff:hover {
-    background-color: #EFADAD;
-}
-
-.Captain {
-    background-color: #d9edf7;
-}
-.Captain:hover {
-    background-color: #c4e3f3;
-}
-
-.Veteran {
-    background-color: #dff0d8;
-}
-.Veteran:hover {
-    background-color: #d0e9c6;
-}
-
-.Regular {
-    background-color: #fcf8e3;
-}
-.Regular:hover {
-    background-color: #faf2cc;
-}
-
-.Recruit {
-    background-color: #f5f5f5;
-}
-.Recruit:hover {
-    background-color: #e8e8e8;
-}
-
-.Guest {
-    background-color: #fae5cc;
-}
-.Guest:hover {
-    background-color: #F5DCC5;
-}
-
-td.username {
-    width: 150px;
-}
-
-td.rank {
-    width: 90px;
-}
-
-td.played {
-    width: 90px;
-}
-
-td.last-played {
-    width: 130px;
-}
-
-td.operations {
-    width: 150px;
-}
-
-.note-value {
-    width: 100%;
-    height: 30px;
-    line-height: 30px;
-    cursor: pointer;
-    display: inline-block;
-    padding-left: 5px;
-}
-
-.note-value:hover {
-    background-color: #fffdf6;
-}
-
-.note-value:empty:hover:before {
-    font-size: 12px;
-    font-style: italic;
-    content: "Click to edit";
-}
-
-.note-value:empty:before {
-  content: "\00a0";
-}
-
-.note-edit {
-    width: 100%;
-    height: 30px;
-    line-height: 30px;
-    display: inline-block;
-}
-
-.note-edit > input {
-    width: 98%;
-    font-family: Arial,sans-serif;
-    font-size: 14px;
-    color: #000;
-    padding: 3px;
-}
-
-button {
-    background-color: #f29747;
-    color: #fff;
-    border: 0;
-    line-height: 24px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #b96f29;
-}
-
-.profile-stats {
-    margin-bottom: 20px;
-}

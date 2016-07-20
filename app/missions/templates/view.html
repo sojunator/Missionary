@@ -2,10 +2,7 @@
 <html lang="en">
 <head>
     <title>Mission submission handling</title>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>    
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="http://code.highcharts.com/highcharts.js"></script>
     <script src="{{ url_for('static', filename='js/missions.js') }}"></script>
     <script src="{{ url_for('static', filename='js/modernizr.custom.80028.js') }}"></script>
@@ -22,76 +19,88 @@
         </div>
         {% endif %}
     {% endwith %}
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
-    <h1>Missions</h1>    
-    <nav class="navbar navbar-default">
-        <div class="container-fluid"
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        </div><!-- /.container-fluid -->
-    </nav>   
-    <span class ="value mission-status {{statuses[0].lower()}}">{{mission.name}} by {{mission.author}}</span>
-    <form action="{{url_for('missions.view_submission', id = mission.id)}}" method=POST>
-        <table class="table table-striped">
-        <tr>
-            <td>Mission type</td>
-            <td><span class="value mission-type {{mission.mission_type}}">{{ mission.mission_type.upper() }}</span></td>
-        </tr>
-        <tr>
-            <td>Playercount</td><td>{{mission.player_count}}</td>
-        </tr>
-        <tr>
-            <td>minplay</td>
-            <td>
-                <select name="min_play">
-                {% for i in range(mission.player_count, -1, -1) %}
-                    <option {% if i|string() == mission.min_play|string() %} selected="selected" {% endif %} value={{i}}>{{i}}</option>
-                {% endfor %}
-                </select>
-            </td>
-        </tr>        
-        <tr>
-            <td>Status</td>
-            <td>
-                <select name="status">
-                {% for status in statuses %}
-                    <option value={{status}}>{{status}}</option>
-                {% endfor %}
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>World</td><td>{{mission.world}}</td>
-        </tr>     
-        </table>
-        <span>Host notes: </span>
-        <textarea rows="5" cols="130" name="host_notes">{{mission.host_notes}}</textarea>
-
-        <input type="submit" value="Update">
-        </form>
+    <div class="col-3"></div>
+    <div class="col-6">
+        <h1>Missions</h1>
+        <ul class=navbar>
+            <li><a href="#">Submissions</a></li>
+            <li><a href="#">On server</a></li>
+            <li><a href="#">Submit</a></li>
+        </ul>       
+        <span class ="value mission-status {{statuses[0].lower()}}">{{mission.name}} by {{mission.author}}</span>
         <form action="{{url_for('missions.view_submission', id = mission.id)}}" method=POST>
-            <textarea rows="5" cols="130" name="comment"></textarea>
-            <input type="submit" value="Comment" name="action">       
-        </form>
-        <table class="table table-striped">
-        {% for comment in comments %}
+            <table class="table table-striped">
+                <tr>
+                    <td>Mission type</td>
+                    <td><span class="value mission-type {{mission.mission_type}}">{{ mission.mission_type.upper() }}</span></td>
+                </tr>
+                <tr>
+                    <td>Playercount</td>
+                    <td>{{mission.player_count}}</td>
+                </tr>
+                <tr>                        
+                    <td>minplay</td>
+                    <td><select name="min_play">
+                    {% for i in range(mission.player_count, -1, -1) %}
+                    <option {% if i|string() == mission.min_play|string() %} selected="selected" {% endif %} value={{i}}>{{i}}</option>
+                    {% endfor %}
+                    </select></td>
+                </tr>        
+                <tr>
+                    <td>Status</td>
+                    <td>
+                        <select name="status">
+                        {% for status in statuses %}
+                            <option value={{status}}>{{status}}</option>
+                        {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>World</td><td>{{mission.world}}</td>
+                </tr>     
+            </table>
+            <span>Host notes: </span>
+            <textarea rows="5" cols="130" name="host_notes">{{mission.host_notes}}</textarea>
 
-        <tr>
-            <td>created</td>
-            <td><span>{{ comment.created }}</span></td>
-        </tr>
-        <tr>
-            <td>comment</td>
-            <td><span>{{ comment.comment }}</span></td>
-        </tr>
-        <tr>
-            <td>ID</td>
-            <td><span>{{ comment.mission_id }}</span></td>
-        </tr>
-        {% endfor %}
-        </table>
+            <input type="submit" value="Update">
+        </form>
+        <button class="accordion">Show feedback</button>
+        <div class="panel">
+            <table class="table table-striped">
+            {% for comment in comments %}
+                <tr>
+                    <td>created</td>
+                    <td><span>{{ comment.created }}</span></td>
+                </tr>
+                <tr>
+                    <td>comment</td>
+                    <td><span>{{ comment.comment }}</span></td>
+                </tr>
+                <tr>
+                    <td>ID</td>
+                    <td><span>{{ comment.mission_id }}</span></td>
+                </tr>
+            {% endfor %}
+            </table>
+            <form action="{{url_for('missions.view_submission', id = mission.id)}}" method=POST>
+                <textarea rows="5" cols="130" name="comment"></textarea>
+                <input type="submit" value="Comment" name="action">       
+            </form>
+        </div>
 
     </div>
-    <div class="col-md-3"></div>
+    <div class="col-3"></div>
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+    acc[i].onclick = function(){
+        this.classList.toggle("active");
+        this.nextElementSibling.classList.toggle("show");
+  }
+}
+</script>
 </body>
 </html>

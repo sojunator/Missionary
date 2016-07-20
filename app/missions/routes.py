@@ -159,14 +159,19 @@ def valid_mission(file):
     if len(mission_name_split) >= 2:
 
         provided_playable = mission_name_split[1]
-        provided_playable = int(re.sub('[^0-9]','', provided_playable))
+        try:
+            provided_playable = int(re.sub('[^0-9]','', provided_playable))
+        except ValueError:
+            flash("Your mission name appears to not follow the naming convention.")
+            return False
 
         raw_text = file.read()
         mission_contents = str(raw_text)
 
         actual_playable = mission_contents.count("isPlayable=1;")
 
-        if (provided_playable != actual_playable):
+
+        if (provided_playable != actual_playable and provided_playable.isdigit()):
             flash("Incorrect amount of playlabe units specified in your filename. Blame Hidden")
             return False
 
