@@ -65,11 +65,31 @@
         </tr>     
         </table>
         <span>Host notes: </span>
-        <textarea rows="15" cols="130" name="host_notes">{{mission.host_notes}}</textarea>
-            
+        <textarea rows="5" cols="130" name="host_notes">{{mission.host_notes}}</textarea>
 
-    <input type="submit" value="Update">
-    </form>
+        <input type="submit" value="Update">
+        </form>
+        <form action="{{url_for('missions.view_submission', id = mission.id)}}" method=POST>
+            <textarea rows="5" cols="130" name="comment"></textarea>
+            <input type="submit" value="Comment" name="action">       
+        </form>
+        <table class="table table-striped">
+        {% for comment in comments %}
+
+        <tr>
+            <td>created</td>
+            <td><span>{{ comment.created }}</span></td>
+        </tr>
+        <tr>
+            <td>comment</td>
+            <td><span>{{ comment.comment }}</span></td>
+        </tr>
+        <tr>
+            <td>ID</td>
+            <td><span>{{ comment.mission_id }}</span></td>
+        </tr>
+        {% endfor %}
+        </table>
 
     </div>
     <div class="col-md-3"></div>

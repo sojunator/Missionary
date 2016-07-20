@@ -43,3 +43,17 @@ class CmpMission(db.Model):
 
     def __repr__(self):
         return self.name
+
+class CmpComment(db.Model):
+    __tablename__='CmpComment'
+    __bind_key__='missionary'
+
+    id=Column(Integer, primary_key=True)
+    mission_id=Column(Integer, nullable=False)
+    comment=Column(String, nullable=False)
+    created=Column(DateTime, nullable=False)
+
+    def __init__(self, missionid, comment, created):
+        self.mission_id=missionid
+        self.comment=comment
+        self.created=created

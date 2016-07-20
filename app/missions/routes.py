@@ -4,7 +4,7 @@ from app import db
 from werkzeug import secure_filename
 
 from .models import Mission
-from app.database.database import CmpMission
+from app.database.database import CmpMission, CmpComment
 
 from config import SERVER_MISSION_FOLDER, TEMPORARY_MISSION_FOLDER
 
@@ -51,7 +51,9 @@ def missions_in_database():
 
 @mod_missions.route('/submissions/')
 def display_submissions():
-    return render_template('modqueue.html', data=db.session.query(CmpMission).filter(or_(CmpMission.status == "Evaluating ")))
+    missions = db.session.query(CmpMission).filter(or_(CmpMission.status == "Evaluating")).all()
+    missions.sort(key=lambda x: x.created, reverse=False)
+    return render_template('modqueue.html', data=missions)
 
 @mod_missions.route('/submissions/submit/', methods=['POST', 'GET'])
 def submit_mission():
@@ -99,24 +101,38 @@ def view_submission(id):
     selected_mission=db.session.query(CmpMission).filter(CmpMission.id == id).first()
     if selected_mission is not None:
 
+        mission_comments = db.session.query(CmpComment).filter(CmpComment.mission_id == id).all()
+
         if request.method == 'POST':
-            selected_mission.status = request.form['status']
-            selected_mission.host_notes = request.form['host_notes']
-            selected_mission.min_play = request.form['min_play']
-            if selected_mission.status == "Accepted":
+            if 'Comment' in request.form.values():
+                commenText = request.form['comment']
+                created = datetime.now()
+                created.strftime("%Y-%m/%d %H:%M")
+                temp_obj = CmpComment(id, commenText, created)
+                db.session.add(temp_obj)
+                db.session.commit()
+                flash("Your comment has been submitted")
 
-            # Since the mission was accepted, move it to the server folder
-                try:
-                    os.rename(TEMPORARY_MISSION_FOLDER +  selected_mission.raw_name, 
+
+
+            else:
+                selected_mission.status = request.form['status']
+                selected_mission.host_notes = request.form['host_notes']
+                selected_mission.min_play = request.form['min_play']
+                if selected_mission.status == "Accepted":
+
+                    # Since the mission was accepted, move it to the server folder
+                    try:
+                        os.rename(TEMPORARY_MISSION_FOLDER +  selected_mission.raw_name, 
                             SERVER_MISSION_FOLDER +  selected_mission.raw_name)
-                except FileNotFoundError:
-                    return "Fatal error, the file is not in the temporary folder, blame Hidden and keep calm" # error must be expanded
+                    except FileNotFoundError:
+                        return "Fatal error, the file is not in the temporary folder, blame Hidden and keep calm" # error must be expanded
 
-                selected_mission.folder = SERVER_MISSION_FOLDER
-                flash("Mission is now flagged as accepted, it has been moved to the server.")
+                    selected_mission.folder = SERVER_MISSION_FOLDER
+                    flash("Mission is now flagged as accepted, it has been moved to the server.")
 
-            flash("Mission successfully updated")
-            db.session.commit()
+                flash("Mission successfully updated")
+                db.session.commit()
 
 
         status = ["Unknown", "Evaluating", "Broken/legacy", "Accepted", "Rejected"]
@@ -125,7 +141,7 @@ def view_submission(id):
         status.remove(selected_mission.status) 
         status.insert(0, selected_mission.status)
 
-        return render_template('view.html', mission = selected_mission, statuses=status)
+        return render_template('view.html', mission = selected_mission, statuses=status, comments=mission_comments)
 
     return "404, mission not found"
 
