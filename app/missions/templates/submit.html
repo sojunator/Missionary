@@ -8,14 +8,17 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/simple.css') }}">
 </head>
 <body>
-    <div class="col-3"></div>
-    <div class="col-6">
-        <h2>Submit mission</h2>
+    <div class="header">
+        <div class="header-text">
+            Missionary
+        </div>
         <ul class=navbar>
-            <li><a href="#">Submissions</a></li>
+            <li><a class="navbar-active" href="#">Submissions</a></li>
             <li><a href="#">On server</a></li>
             <li><a href="#">Submit</a></li>
-        </ul>    
+        </ul>  
+    </div>
+    <div class="content">  
         {% with messages = get_flashed_messages() %}
             {% if messages %}
             <ul class=flashes>

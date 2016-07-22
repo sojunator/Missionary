@@ -52,8 +52,10 @@ class CmpComment(db.Model):
     mission_id=Column(Integer, nullable=False)
     comment=Column(String, nullable=False)
     created=Column(DateTime, nullable=False)
+    author=Column(String, nullable=False)
 
-    def __init__(self, missionid, comment, created):
+    def __init__(self, missionid, comment, created, author):
         self.mission_id=missionid
         self.comment=comment
         self.created=created
+        self.author=author

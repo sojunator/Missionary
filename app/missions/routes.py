@@ -29,12 +29,28 @@ def populate_database():
     # build database from hardrive. 
     for file in os.listdir(SERVER_MISSION_FOLDER):
         if file.endswith(".pbo"):
+
             temp_name = re.sub('(?:[.](.*)|_[vV]([0-9]+(.*))?)', '', file)
             world_name = file.split('.')[1]
             created = datetime.now()
             created.strftime("%Y-%m/%d %H:%M")
-            temp_mission = CmpMission(temp_name, world_name, "soju", file, "Unknown", "", 0, created, SERVER_MISSION_FOLDER)
+
+            # fetch the author from file
+            with open(SERVER_MISSION_FOLDER+file, 'r', encoding="utf8", errors='ignore') as missionfile:
+                mission_contents = missionfile.readlines()
+
+
+            for line in mission_contents:
+                line = line.strip()
+
+                if "author" in line:
+                    author = re.findall(r'"([^"]*)"', line)
+
+
+            temp_mission = CmpMission(temp_name, world_name, author[0], file, "Accepted", "", 0, created, SERVER_MISSION_FOLDER)
             folder_missions.append(temp_mission)
+
+            # this test needs to be first, wtf
             if temp_mission not in database_missions:
                 db.session.add(temp_mission)
             
@@ -65,6 +81,7 @@ def submit_mission():
 
             filename = secure_filename(file.filename)
 
+
             if valid_mission(file):
 
                 file.save(TEMPORARY_MISSION_FOLDER + file.filename)
@@ -83,7 +100,7 @@ def submit_mission():
                 db.session.add(temp_mission)
                 db.session.commit()
                 obj = db.session.query(CmpMission).order_by('-id').first()
-                flash("Your mission has been sucsessfully been submitted. A member of the staff will take a look at your mission.")
+                flash("Your mission has been sucsessfully been submitted.")
                 # Email routine should kick in here
                 return redirect(url_for('missions.view_submission', id=obj.id))
 
@@ -108,7 +125,7 @@ def view_submission(id):
                 commenText = request.form['comment']
                 created = datetime.now()
                 created.strftime("%Y-%m/%d %H:%M")
-                temp_obj = CmpComment(id, commenText, created)
+                temp_obj = CmpComment(id, commenText, created, "soju")
                 db.session.add(temp_obj)
                 db.session.commit()
                 flash("Your comment has been submitted")
@@ -140,7 +157,7 @@ def view_submission(id):
         # A tad ugly, but we need the item to be garantueed first in the list.
         status.remove(selected_mission.status) 
         status.insert(0, selected_mission.status)
-
+        mission_comments.sort(key=lambda x: x.created, reverse=True)
         return render_template('view.html', mission = selected_mission, statuses=status, comments=mission_comments)
 
     return "404, mission not found"
@@ -153,9 +170,8 @@ def allowed_file(filename):
 
 def valid_mission(file):
     #check file name
-
-
     mission_name_split = file.filename.split("_")
+
     if len(mission_name_split) >= 2:
 
         provided_playable = mission_name_split[1]
@@ -166,12 +182,16 @@ def valid_mission(file):
             return False
 
         raw_text = file.read()
+        file.seek(0)
         mission_contents = str(raw_text)
+        print(mission_contents)
 
-        actual_playable = mission_contents.count("isPlayable=1;")
+        actual_playable = []
+        actual_playable.append(int(mission_contents.count("isPlayable=1;")))
+        actual_playable.append(int(mission_contents.count('player="PLAYER COMMANDER";')))
 
 
-        if (provided_playable != actual_playable and provided_playable.isdigit()):
+        if (provided_playable in actual_playable and isinstance(provided_playable, int)):
             flash("Incorrect amount of playlabe units specified in your filename. Blame Hidden")
             return False
 
@@ -179,7 +199,7 @@ def valid_mission(file):
             flash("Your mission name appears to not follow the naming convention.")
             return False
 
-
+    
 
         return True
     else:
