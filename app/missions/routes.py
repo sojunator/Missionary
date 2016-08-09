@@ -158,7 +158,7 @@ def view_submission(id):
         status.remove(selected_mission.status) 
         status.insert(0, selected_mission.status)
         mission_comments.sort(key=lambda x: x.created, reverse=True)
-        return render_template('view.html', mission = selected_mission, statuses=status, comments=mission_comments)
+        return render_template('view.html', mission = selected_mission, statuses=status, comments=mission_comments, folder=TEMPORARY_MISSION_FOLDER)
 
     return "404, mission not found"
 
@@ -184,15 +184,14 @@ def valid_mission(file):
         raw_text = file.read()
         file.seek(0)
         mission_contents = str(raw_text)
-        print(mission_contents)
+
 
         actual_playable = []
         actual_playable.append(int(mission_contents.count("isPlayable=1;")))
         actual_playable.append(int(mission_contents.count('player="PLAYER COMMANDER";')))
 
-
-        if (provided_playable in actual_playable and isinstance(provided_playable, int)):
-            flash("Incorrect amount of playlabe units specified in your filename. Blame Hidden")
+        if not (provided_playable in actual_playable):
+            flash("Your mission has " + str(actual_playable[0]) + " " + str(actual_playable[1]) + " While file name is " + str(provided_playable))
             return False
 
         if not re.search('ark+_[a-z]+[0-9]+_.+[.].+[.]pbo', file.filename):

@@ -2,47 +2,31 @@
 <html lang="en">
 <head>
     <title>Missions in database</title>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>    
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="{{ url_for('static', filename='js/missions.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/simple.css') }}">
 </head>
 <body>
-
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
-    <h1>Missions</h1>    
-    <nav class="navbar navbar-default">
-        <div class="container-fluid"
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        </div><!-- /.container-fluid -->
-    </nav>    
-        <table class="table table-bordered table-hover sortable table-condensed">
-            <thead>
+    <div class="header">
+        <div class="header-text">
+            Missionary
+        </div>
+        <ul class=navbar>
+            <li><a class="navbar-active" href="#">Submissions</a></li>
+            <li><a href="#">On server</a></li>
+            <li><a href="#">Submit</a></li>
+        </ul>  
+    </div>
+    <div class="content">  
+        <h1>Missions awainting approval</h1>
+        <table>
             <tr>
-                <th>ID</th>
-                <th>Missionname</th>
-                <th>player count</th>
-                <th>world name</th>
-                <th>author</th>
-                <th>mission type</th>
-                <th>status</th>
+                <th>test</th>
             </tr>
-        </thead>
-        {% for mission in data %}  
             <tr>
-                <td>{{mission.id}}</td>
-                <td>{{mission.raw_name}}</td>
-                <td>{{mission.player_count}}</td>
-                <td>{{mission.world}}</td>
-                <td>{{mission.author}}</td>
-                <td>{{mission.mission_type}}</td>
-                <td>{{mission.status}}</td>
+                <td>12</td>
             </tr>
-        {% endfor %}
         </table>
     </div>
-    <div class="col-md-3"></div>
+</div>
 </body>
 </html>
