@@ -8,7 +8,7 @@ from app.database.database import CmpMission, CmpComment
 
 from config import SERVER_MISSION_FOLDER, TEMPORARY_MISSION_FOLDER
 
-from datetime import datetime
+import datetime
 import os
 import re
 
@@ -32,7 +32,7 @@ def populate_database():
 
             temp_name = re.sub('(?:[.](.*)|_[vV]([0-9]+(.*))?)', '', file)
             world_name = file.split('.')[1]
-            created = datetime.now()
+            created = datetime.datetime.now()
             created.strftime("%Y-%m/%d %H:%M")
 
             # fetch the author from file
@@ -67,9 +67,11 @@ def missions_in_database():
 
 @mod_missions.route('/submissions/')
 def display_submissions():
-    missions = db.session.query(CmpMission).filter(or_(CmpMission.status == "Evaluating")).all()
+    missions = db.session.query(CmpMission).filter(or_(CmpMission.status != "Accepted")).all()
     missions.sort(key=lambda x: x.created, reverse=False)
-    return render_template('modqueue.html', data=missions)
+    return render_template('modqueue.html', data=missions, today=datetime.date.today())
+
+
 
 @mod_missions.route('/submissions/submit/', methods=['POST', 'GET'])
 def submit_mission():
@@ -81,18 +83,19 @@ def submit_mission():
 
             filename = secure_filename(file.filename)
 
+            min_play = request.form['min_play']
 
-            if valid_mission(file):
+            if valid_mission(file, min_play):
 
                 file.save(TEMPORARY_MISSION_FOLDER + file.filename)
 
-                min_play = request.form['min_play']
+                
                 staff_notes = request.form['freetext']
 
                 # remove versoning numbers
                 temp_name = re.sub('(?:[.](.*)|_[vV]([0-9]+(.*))?)', '', file.filename)
                 world_name = file.filename.split('.')[1]
-                created = datetime.now()
+                created = datetime.datetime.now()
                 created.strftime("%Y-%m/%d %H:%M")
                 temp_mission = CmpMission(temp_name, world_name, "soju", file.filename, "Evaluating", staff_notes, min_play, created, TEMPORARY_MISSION_FOLDER)
 
@@ -115,15 +118,15 @@ def submit_mission():
 
 @mod_missions.route('/submissions/view/<id>', methods=['POST', 'GET'])
 def view_submission(id):
-    selected_mission=db.session.query(CmpMission).filter(CmpMission.id == id).first()
-    if selected_mission is not None:
+    selected_mission=db.session.query(CmpMission).filter(CmpMission.id == id and CmpMission.status != "Accepted").first()
+    if selected_mission is not None and selected_mission.status != "Accepted":
 
         mission_comments = db.session.query(CmpComment).filter(CmpComment.mission_id == id).all()
 
         if request.method == 'POST':
             if 'Comment' in request.form.values():
                 commenText = request.form['comment']
-                created = datetime.now()
+                created = datetime.datetime.now()
                 created.strftime("%Y-%m/%d %H:%M")
                 temp_obj = CmpComment(id, commenText, created, "soju")
                 db.session.add(temp_obj)
@@ -160,7 +163,7 @@ def view_submission(id):
         mission_comments.sort(key=lambda x: x.created, reverse=True)
         return render_template('view.html', mission = selected_mission, statuses=status, comments=mission_comments, folder=TEMPORARY_MISSION_FOLDER)
 
-    return "404, mission not found"
+    return redirect(url_for('missions.display_submissions'))
 
 def allowed_file(filename):
     # Must log attempts at malicious files and notify staff
@@ -168,7 +171,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-def valid_mission(file):
+def valid_mission(file, min_play):
     #check file name
     mission_name_split = file.filename.split("_")
 
@@ -198,6 +201,9 @@ def valid_mission(file):
             flash("Your mission name appears to not follow the naming convention.")
             return False
 
+        if int(min_play) > provided_playable:
+            flash("Minimum amounts of players are higher than actual playable units")
+            return False
     
 
         return True
