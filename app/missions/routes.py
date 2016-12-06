@@ -21,7 +21,6 @@ def display_missions():
     populate_database()
     return render_template('index.html', data=missions_in_database())
 
-
 def populate_database():
     folder_missions = []
     database_missions = db.session.query(CmpMission).all()
@@ -57,21 +56,14 @@ def populate_database():
 
     db.session.commit()
 
-
-
 def missions_in_database():
     return db.session.query(CmpMission).filter(or_(CmpMission.status == "Accepted", CmpMission.status == "Unknown"))
-
-
-
 
 @mod_missions.route('/submissions/')
 def display_submissions():
     missions = db.session.query(CmpMission).filter(or_(CmpMission.status != "Accepted")).all()
     missions.sort(key=lambda x: x.created, reverse=False)
     return render_template('modqueue.html', data=missions, today=datetime.date.today())
-
-
 
 @mod_missions.route('/submissions/submit/', methods=['POST', 'GET'])
 def submit_mission():
@@ -110,11 +102,12 @@ def submit_mission():
         else:
             flash("Please only submit pbo files.")
 
-
-
-
     return render_template('submit.html', error=error)
 
+@mod_missions.route('/<name>')
+def view_mission_on_server(name):
+    selected_mission=db.session.query(CmpMission).filter(CmpMission.name == name).first()
+    return render_template('mission.html', data=selected_mission)
 
 @mod_missions.route('/submissions/view/<id>', methods=['POST', 'GET'])
 def view_submission(id):
@@ -161,7 +154,7 @@ def view_submission(id):
         status.remove(selected_mission.status)
         status.insert(0, selected_mission.status)
         mission_comments.sort(key=lambda x: x.created, reverse=True)
-        return render_template('view.html', mission = selected_mission, statuses=status, comments=mission_comments, folder=TEMPORARY_MISSION_FOLDER)
+        return render_template('view_submission.html', mission = selected_mission, statuses=status, comments=mission_comments, folder=TEMPORARY_MISSION_FOLDER)
 
     return redirect(url_for('missions.display_submissions'))
 
