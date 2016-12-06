@@ -2,69 +2,46 @@
 <html lang="en">
 <head>
     <title>Arma 3 missions</title>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="http://code.highcharts.com/highcharts.js"></script>
     <script src="{{ url_for('static', filename='js/missions.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/simple.css') }}">
 </head>
 <body>
-<div class="col-md-2"></div>
-<div class="col-md-8">
-<div class="container">
     <div class="header">
-        <h1>Arma 3 missions</h1>
-        <div class="navigation">
-            <div class="navigation-button"><a href="#"}}>Sessions</a></div>
-            <div class="navigation-button"><a href="#">Players</a></div>
-            <div class="navigation-button active"><a href="#"}}>Missions</a></div>
+        <div class="header-text">
+            Missionary
+        </div>
+            <ul class=navbar>
+                <li><a class="navbar-active" href="#">Submissions</a></li>
+                <li><a href="#">On server</a></li>
+                <li><a href="#">Submit</a></li>
             </ul>
-        </div>
-    <div>
-    <div>
-    {% for mission in data %}
-        <div class="mission-container">
-            <div class="mission-header">
-                <div class="mission-type {{ mission.mission_type }}">{{ mission.mission_type.upper()}}</div>
-                <div class="mission-player-count">{{ mission.player_count }}</div>
-                <div class="mission-name"><span class="mission-collapse">{{ mission.name }}</span></div>
-                <div class="mission-world">{{mission.world}}</div>
-                <div class="mission-edit"><a href="{{url_for('missions.view_submission', id=mission.id)}}">Edit</a></div>
-                <div class="mission-delete"><a href="#">Delete</a></div>
-            </div>
-            <div class="field-content" style="display: none;">
-                <div class="row">
-                    <div class="field">
-                        <span class="label">Host notes:</span>
-                        <span class="value">{{mission.host_notes}}
-                        </span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="field">
-                        <span class="label">Mission type:</span>
-                        <span class="value mission-type {{mission.mission_type}}">{{ mission.mission_type.upper() }}</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="field">
-                        <span class="label">Min req:</span>
-                        <span class="value">{{mission.min_play}}</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="field">
-                        <span class="label">Created:</span>
-                        <span class="value">{{mission.created}}</span>
-                    </div>
-                </div>                
-            </div>
-        </div>
-    {% endfor %}
     </div>
-</div>
-</div>
-<div class="col-md-3"></div>
+    <div class="content">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Mission name</th>
+                    <th>Status</th>
+                    <th>Type</th>
+                    <th>World</th>
+                    <th>Author</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for mission in data %}
+                <tr>
+                    <th scope="row">{{loop.index}}</th>
+                    <td><a href="{{url_for('missions.view_submission', id = mission.id)}}">{{mission.name}}</a></td>
+                    <td><span class="label label-{{mission.status}}">{{mission.status}}</span></td>
+                    <td><span class="value mission-type {{mission.mission_type}}">{{mission.mission_type}}</span></td>
+                    <td>{{mission.world}}</td>
+                    <td>{{mission.author}}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

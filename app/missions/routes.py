@@ -26,7 +26,7 @@ def populate_database():
     folder_missions = []
     database_missions = db.session.query(CmpMission).all()
 
-    # build database from hardrive. 
+    # build database from hardrive.
     for file in os.listdir(SERVER_MISSION_FOLDER):
         if file.endswith(".pbo"):
 
@@ -53,7 +53,7 @@ def populate_database():
             # this test needs to be first, wtf
             if temp_mission not in database_missions:
                 db.session.add(temp_mission)
-            
+
 
     db.session.commit()
 
@@ -61,7 +61,7 @@ def populate_database():
 
 def missions_in_database():
     return db.session.query(CmpMission).filter(or_(CmpMission.status == "Accepted", CmpMission.status == "Unknown"))
-     
+
 
 
 
@@ -89,7 +89,7 @@ def submit_mission():
 
                 file.save(TEMPORARY_MISSION_FOLDER + file.filename)
 
-                
+
                 staff_notes = request.form['freetext']
 
                 # remove versoning numbers
@@ -112,7 +112,7 @@ def submit_mission():
 
 
 
-       
+
     return render_template('submit.html', error=error)
 
 
@@ -143,7 +143,7 @@ def view_submission(id):
 
                     # Since the mission was accepted, move it to the server folder
                     try:
-                        os.rename(TEMPORARY_MISSION_FOLDER +  selected_mission.raw_name, 
+                        os.rename(TEMPORARY_MISSION_FOLDER +  selected_mission.raw_name,
                             SERVER_MISSION_FOLDER +  selected_mission.raw_name)
                     except FileNotFoundError:
                         return "Fatal error, the file is not in the temporary folder, blame Hidden and keep calm" # error must be expanded
@@ -158,7 +158,7 @@ def view_submission(id):
         status = ["Unknown", "Evaluating", "Broken/legacy", "Accepted", "Rejected"]
 
         # A tad ugly, but we need the item to be garantueed first in the list.
-        status.remove(selected_mission.status) 
+        status.remove(selected_mission.status)
         status.insert(0, selected_mission.status)
         mission_comments.sort(key=lambda x: x.created, reverse=True)
         return render_template('view.html', mission = selected_mission, statuses=status, comments=mission_comments, folder=TEMPORARY_MISSION_FOLDER)
@@ -204,7 +204,7 @@ def valid_mission(file, min_play):
         if int(min_play) > provided_playable:
             flash("Minimum amounts of players are higher than actual playable units")
             return False
-    
+
 
         return True
     else:
