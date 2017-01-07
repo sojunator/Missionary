@@ -12,8 +12,8 @@
             Missionary
         </div>
             <ul class=navbar>
-                <li><a class="navbar-active" href="#">Submissions</a></li>
-                <li><a href="#">On server</a></li>
+                <li><a href="{{url_for('missions.display_submissions')}}">Submissions</a></li>
+                <li><a class="navbar-active" href="#">On server</a></li>
                 <li><a href="#">Submit</a></li>
             </ul>
     </div>
@@ -33,7 +33,7 @@
             {% for mission in data %}
                 <tr>
                     <th scope="row">{{loop.index}}</th>
-                    <td><a href="{{url_for('missions.view_submission', id = mission.id)}}">{{mission.name}}</a></td>
+                    <td><a href="{{url_for('missions.view_mission_on_server', name = mission.name)}}">{{mission.name}}</a></td>
                     <td><span class="label label-{{mission.status}}">{{mission.status}}</span></td>
                     <td><span class="value mission-type {{mission.mission_type}}">{{mission.mission_type}}</span></td>
                     <td>{{mission.world}}</td>

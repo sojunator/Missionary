@@ -21,6 +21,7 @@ def display_missions():
     populate_database()
     return render_template('index.html', data=missions_in_database())
 
+
 def populate_database():
     folder_missions = []
     database_missions = db.session.query(CmpMission).all()
@@ -56,14 +57,17 @@ def populate_database():
 
     db.session.commit()
 
+
 def missions_in_database():
     return db.session.query(CmpMission).filter(or_(CmpMission.status == "Accepted", CmpMission.status == "Unknown"))
+
 
 @mod_missions.route('/submissions/')
 def display_submissions():
     missions = db.session.query(CmpMission).filter(or_(CmpMission.status != "Accepted")).all()
     missions.sort(key=lambda x: x.created, reverse=False)
     return render_template('modqueue.html', data=missions, today=datetime.date.today())
+
 
 @mod_missions.route('/submissions/submit/', methods=['POST', 'GET'])
 def submit_mission():
@@ -104,13 +108,17 @@ def submit_mission():
 
     return render_template('submit.html', error=error)
 
+
 @mod_missions.route('/<name>')
 def view_mission_on_server(name):
     selected_mission=db.session.query(CmpMission).filter(CmpMission.name == name).first()
     return render_template('mission.html', data=selected_mission)
 
+
 @mod_missions.route('/submissions/view/<id>', methods=['POST', 'GET'])
 def view_submission(id):
+    # if no submissions are found, display the
+    # normal mission overiew
     selected_mission=db.session.query(CmpMission).filter(CmpMission.id == id and CmpMission.status != "Accepted").first()
     if selected_mission is not None and selected_mission.status != "Accepted":
 
@@ -125,8 +133,6 @@ def view_submission(id):
                 db.session.add(temp_obj)
                 db.session.commit()
                 flash("Your comment has been submitted")
-
-
 
             else:
                 selected_mission.status = request.form['status']
@@ -158,11 +164,28 @@ def view_submission(id):
 
     return redirect(url_for('missions.display_submissions'))
 
+
 def allowed_file(filename):
     # Must log attempts at malicious files and notify staff
     ALLOWED_EXTENSIONS = set(['pbo'])
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
+def delete_mission(mission):
+    # deletes file from database
+    # and local file
+    selected_mission=db.session.query(CmpMission).filter(CmpMission.name == mission.name).first()
+    if (selected_mission != ""):
+        db.session.delete(selected_mission)
+        try:
+            os.remove(mission.folder + mission.raw_name)
+        except FileNotFoundError:
+            print("Failed to delete file, it could not be found")
+
+    else:
+        print("Mission not in database")
+
 
 def valid_mission(file, min_play):
     #check file name
