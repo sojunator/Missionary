@@ -208,9 +208,11 @@ def valid_mission(file, min_play):
         actual_playable = []
         actual_playable.append(int(mission_contents.count("isPlayable=1;")))
         actual_playable.append(int(mission_contents.count('player="PLAYER COMMANDER";')))
+        actual_playable.append(int(mission_contents.count("isPlayable") - int(mission_contents.count("HeadlessClient_F"))))
+        actual_playable.append(int(mission_contents.count("isPlayer")))
 
         if not (provided_playable in actual_playable):
-            flash("Your mission has " + str(actual_playable[0]) + " " + str(actual_playable[1]) + " While file name is " + str(provided_playable))
+            flash("Your mission has " + str(actual_playable[2]) + " " + str(actual_playable[3]) + " While file name is " + str(provided_playable))
             return False
 
         if not re.search('ark+_[a-z]+[0-9]+_.+[.].+[.]pbo', file.filename):
