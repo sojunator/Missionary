@@ -36,7 +36,7 @@
                     <th scope="row">{{loop.index}}</th>
                     <td><a href="{{url_for('missions.view_submission', id = mission.id)}}">{{mission.name}}</a></td>
                     <td><span class="label label-{{mission.status}}">{{mission.status}}</span></td>
-                    <td>{{mission.updated}}</td>
+                    <td>{{mission.update}}</td>
                     <td>
                         <span title="{{mission.created}}">{{ 'today' if (today - mission.created.date()).days <= 0 else (today - mission.created.date()).days ~ ' days ago' }}</span>
                     </td>

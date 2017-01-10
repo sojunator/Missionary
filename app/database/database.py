@@ -8,7 +8,7 @@ from string import digits
 class CmpMission(db.Model):
     __tablename__ = 'CmpMission'
     __bind_key__ = 'missionary'
-    
+
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
     raw_name = Column(String, nullable=False)
@@ -38,8 +38,8 @@ class CmpMission(db.Model):
         self.update = None
         self.folder = folder
 
-    def __eq__(self, other):
-        return self.name == other.name
+
+
 
     def __repr__(self):
         return self.name

@@ -72,9 +72,9 @@ def display_submissions():
 @mod_missions.route('/submissions/submit/', methods=['POST', 'GET'])
 def submit_mission():
     error = None
+
     if request.method == 'POST':
         file = request.files['file']
-
         if file and allowed_file(file.filename):
 
             filename = secure_filename(file.filename)
@@ -83,9 +83,7 @@ def submit_mission():
 
             if valid_mission(file, min_play):
 
-                file.save(TEMPORARY_MISSION_FOLDER + file.filename)
-
-
+                file.save(TEMPORARY_MISSION_FOLDER + file.filename) #Save to temp folder
                 staff_notes = request.form['freetext']
 
                 # remove versoning numbers
@@ -112,7 +110,11 @@ def submit_mission():
 @mod_missions.route('/<name>')
 def view_mission_on_server(name):
     selected_mission=db.session.query(CmpMission).filter(CmpMission.name == name).first()
-    return render_template('mission.html', data=selected_mission)
+    if (selected_mission != None):
+        return render_template('mission.html', data=selected_mission)
+
+    else:
+        return redirect(url_for('missions.display_missions'))
 
 
 @mod_missions.route('/submissions/view/<id>', methods=['POST', 'GET'])
@@ -124,7 +126,20 @@ def view_submission(id):
 
         mission_comments = db.session.query(CmpComment).filter(CmpComment.mission_id == id).all()
 
+
+
+
         if request.method == 'POST':
+            if (request.form['submit'] == 'Delete'):
+                value = delete_mission(selected_mission)
+
+                if (value == -1):
+                    print("Failed to delete mission")
+                    return "Error, failed to delete mission"
+
+                return redirect(url_for('missions.display_submissions'))
+
+
             if 'Comment' in request.form.values():
                 commenText = request.form['comment']
                 created = datetime.datetime.now()
@@ -138,6 +153,7 @@ def view_submission(id):
                 selected_mission.status = request.form['status']
                 selected_mission.host_notes = request.form['host_notes']
                 selected_mission.min_play = request.form['min_play']
+                selected_mission.update = datetime.datetime.now();
                 if selected_mission.status == "Accepted":
 
                     # Since the mission was accepted, move it to the server folder
@@ -176,15 +192,18 @@ def delete_mission(mission):
     # deletes file from database
     # and local file
     selected_mission=db.session.query(CmpMission).filter(CmpMission.name == mission.name).first()
-    if (selected_mission != ""):
-        db.session.delete(selected_mission)
-        try:
-            os.remove(mission.folder + mission.raw_name)
-        except FileNotFoundError:
-            print("Failed to delete file, it could not be found")
+    if (selected_mission == None):
+        flash("Failed to delete the mission")
+        return -1
+    try:
+        os.remove(mission.folder + mission.raw_name)
+    except FileNotFoundError:
+        print("Failed to delete file, it could not be found")
 
-    else:
-        print("Mission not in database")
+    db.session.delete(selected_mission)
+    db.session.commit()
+    return 1
+
 
 
 def valid_mission(file, min_play):
